@@ -1,6 +1,6 @@
 # tongflow-modal-qwen3tts
 
-Official TongFlow plugin. Text-to-speech with **Qwen3-TTS** (`Qwen/Qwen3-TTS-12Hz-1.7B`, Base / CustomVoice / VoiceDesign variants), running on a GPU via [Modal](https://modal.com).
+Official [TongFlow](https://github.com/tong-io/tongflow) plugin. Text-to-speech with **Qwen3-TTS** (`Qwen/Qwen3-TTS-12Hz-1.7B`, Base / CustomVoice / VoiceDesign variants), running on a GPU via [Modal](https://modal.com).
 
 ## Capabilities
 
