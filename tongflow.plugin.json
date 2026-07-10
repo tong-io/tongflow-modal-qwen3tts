@@ -1,4 +1,9 @@
 {
+    "plugin": {
+        "name": "Qwen3-TTS",
+        "description": "Text-to-speech with Alibaba Qwen3-TTS — preset voices, voice cloning, and instruction-driven styles.",
+        "icon": "/plugins/tongflow-modal-qwen3tts.svg"
+    },
     "env": [
         {
             "key": "MODAL_TOKEN_ID",
