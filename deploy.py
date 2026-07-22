@@ -67,7 +67,7 @@ image = (
     modal.Image.from_registry("pytorch/pytorch:2.5.1-cuda12.4-cudnn9-devel")
     .apt_install("sox", "libsox-dev", "ffmpeg")
     .pip_install(
-        "tongflow==0.1.0",
+        "tongflow==0.2.13", "fastapi[standard]",
         "qwen-tts==0.1.1",
         "transformers==4.57.3",
         "accelerate==1.12.0",
@@ -158,6 +158,21 @@ class Design:
             success=True, audio=asset(raw, mime="audio/wav")
         )
 
+    @modal.fastapi_endpoint(method="GET", label=f"{Path(__file__).resolve().parent.name}-design-serve")
+    def serve(self, taskId: str = "", token: str = "", origin: str = ""):
+        from fastapi.responses import StreamingResponse
+        from tongflow import serve_stream_from_spec
+
+        return StreamingResponse(
+            serve_stream_from_spec(
+                origin, taskId, token, __file__,
+                invoke=lambda m, inp: getattr(self, m).local(inp),
+            ),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*"},
+        )
+
+
 
 @deploy
 @app.cls(
@@ -233,6 +248,21 @@ class Custom:
         return TextGenSpeechPresetOutput(
             success=True, audio=asset(raw, mime="audio/wav")
         )
+
+    @modal.fastapi_endpoint(method="GET", label=f"{Path(__file__).resolve().parent.name}-custom-serve")
+    def serve(self, taskId: str = "", token: str = "", origin: str = ""):
+        from fastapi.responses import StreamingResponse
+        from tongflow import serve_stream_from_spec
+
+        return StreamingResponse(
+            serve_stream_from_spec(
+                origin, taskId, token, __file__,
+                invoke=lambda m, inp: getattr(self, m).local(inp),
+            ),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*"},
+        )
+
 
 
 @deploy
@@ -334,3 +364,18 @@ class Reference:
         return TextGenSpeechCloneOutput(
             success=True, audio=asset(raw, mime="audio/wav")
         )
+
+    @modal.fastapi_endpoint(method="GET", label=f"{Path(__file__).resolve().parent.name}-reference-serve")
+    def serve(self, taskId: str = "", token: str = "", origin: str = ""):
+        from fastapi.responses import StreamingResponse
+        from tongflow import serve_stream_from_spec
+
+        return StreamingResponse(
+            serve_stream_from_spec(
+                origin, taskId, token, __file__,
+                invoke=lambda m, inp: getattr(self, m).local(inp),
+            ),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*"},
+        )
+
